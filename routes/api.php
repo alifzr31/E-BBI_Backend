@@ -32,7 +32,8 @@ Route::middleware('auth:api')->post('/storemateri', [MateriController::class, 's
 Route::middleware('auth:api')->get('/detailmateri/{id}', [MateriController::class, 'show']);
 Route::middleware('auth:api')->post('/updatemateri/{id}', [MateriController::class, 'update']);
 
-Route::middleware('auth:api')->get('/indextugasperpelajaran/{id}', [TugasController::class, 'indextugas']);
+Route::middleware('auth:api')->get('/indextugasperpelajaran/{guru_matpel_id}', [TugasController::class, 'indextugas']);
+Route::middleware('auth:api')->get('/detailtugas/{id}', [TugasController::class, 'detailtugas']);
 Route::middleware('auth:api')->post('/storetugasguru', [TugasController::class, 'storeGuru']);
 Route::middleware('auth:api')->post('/storetugassiswa/{id}', [TugasController::class, 'storeSiswa']);
 

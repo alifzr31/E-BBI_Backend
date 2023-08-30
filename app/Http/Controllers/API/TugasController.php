@@ -13,21 +13,35 @@ use Illuminate\Support\Facades\Validator;
 
 class TugasController extends Controller
 {
-    public function indextugas($id)
+    public function indextugas($guru_matpel_id)
     {
         $user = Auth::user();
         if ($user->role == 'siswa') {
-            $tugas = GuruMatpel::where('id', $id)->with(['matpel', 'kelas', 'guru', 'tugas.tugassiswa.siswa'])->first();
-            // $tugassiswa = TugasSiswa::where('siswa_id', 1)->first();
-            $tgs = Tugas::where('guru_matpel_id', $id)->with(['tugassiswa', 'siswa'])->get();
-            // $tugas = Tugas::where('guru_matpel_id', $id)->latest()->with(['gurumatpel'])->get();
         } else {
-            $tugas = Tugas::where('guru_matpel_id', $id)->latest()->with(['tugassiswa.siswa'])->get();
+            $tugas = Tugas::where('guru_matpel_id', $guru_matpel_id)->latest()->get();
+            // $tugas = GuruMatpel::where('id', $guru_matpel_id)->with(['guru', 'tugas'])->get();
         }
+
 
         return response()->json([
             'success' => true,
             'msg' => 'List Data Tugas',
+            'data' => $tugas,
+        ]);
+    }
+
+    public function detailtugas($id)
+    {
+        $user = Auth::user();
+        if ($user->role == 'siswa') {
+            // $tugas = TugasSiswa::where('siswa_id', $user->siswa_id)->with('tugas')->get();
+        } else {
+            $tugas = Tugas::where('id', $id)->latest()->with(['tugassiswa.siswa'])->first();
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'List Data Detail Tugas',
             'data' => $tugas,
         ]);
     }
