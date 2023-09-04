@@ -37,6 +37,11 @@ class GuruMatpel extends Model
 
     public function tugas()
     {
-        return $this->hasMany(Tugas::class);
+        return $this->hasMany(Tugas::class)->latest();
+    }
+
+    public function licon()
+    {
+        return $this->hasMany(Licon::class)->latest();
     }
 }

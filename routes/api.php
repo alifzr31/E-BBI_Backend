@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\LiconController;
 use App\Http\Controllers\API\MateriController;
 use App\Http\Controllers\API\TugasController;
 use App\Http\Controllers\API\UserController;
@@ -33,9 +34,14 @@ Route::middleware('auth:api')->get('/detailmateri/{id}', [MateriController::clas
 Route::middleware('auth:api')->post('/updatemateri/{id}', [MateriController::class, 'update']);
 
 Route::middleware('auth:api')->get('/indextugasperpelajaran/{guru_matpel_id}', [TugasController::class, 'indextugas']);
-Route::middleware('auth:api')->get('/detailtugas/{id}', [TugasController::class, 'detailtugas']);
+Route::middleware('auth:api')->get('/detailtugas/{tugas_id}', [TugasController::class, 'detailtugas']);
 Route::middleware('auth:api')->post('/storetugasguru', [TugasController::class, 'storeGuru']);
 Route::middleware('auth:api')->post('/storetugassiswa/{id}', [TugasController::class, 'storeSiswa']);
+Route::middleware('auth:api')->post('/inputnilai/{tugas_siswa_id}', [TugasController::class, 'inputnilai']);
+
+Route::middleware('auth:api')->get('/licon', [LiconController::class, 'index']);
+Route::middleware('auth:api')->post('/storelicon/{guru_matpel_id}', [LiconController::class, 'storeLicon']);
+Route::middleware('auth:api')->get('/getonelicon/{guru_matpel_id}', [LiconController::class, 'getOneLicon']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout']);

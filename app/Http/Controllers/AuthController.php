@@ -11,17 +11,14 @@ class AuthController extends Controller
     public function login()
     {
         if (Auth::user()) {
-            if (Auth::user()->role == 'siswa' || Auth::user()->role == 'guru') {
-                return redirect()->route('dashboard');
-            } else {
+            if (Auth::user()->role == 'admin') {
                 return redirect()->route('admin-dashboard');
             }
-            
         }
-        
+
         return view('auth.index');
     }
-    
+
     public function loginStore(Request $request)
     {
         $cred = $this->validate($request, [
@@ -30,19 +27,19 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($cred)) {
-            return redirect()->route('login')->with(['error' => 'Username or password is incorrect']);
+            return redirect()->route('login')->with(['error' => 'Username atau password salah']);
         }
 
         $user = Auth::user();
 
 
-        if ($user->role === 'siswa' || $user->role == 'guru') {
-            return redirect()->route('dashboard');
+        if ($user->role == 'siswa' || $user->role == 'guru') {
+            return redirect()->route('login')->with(['success' => 'Untuk guru maupun siswa silahkan log in melalui aplikasi mobile E-BBI']);
         } else {
-            return redirect()->route('admin-dashboard');
+            return redirect()->route('admin-dashboard')->with(['success' => 'Selamat Datang Admin']);
         }
 
-        return redirect()->route('index');
+        // return redirect()->route('index');
     }
 
     public function logout()

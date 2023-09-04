@@ -19,7 +19,7 @@ class MateriController extends Controller
         $siswa = Siswa::where('id', $user->siswa_id)->first();
 
         if ($user->role == 'siswa') {
-            $materi = GuruMatpel::where('id', $id)->where('kelas_id', $siswa->kelas_id)->with(['matpel', 'materi', 'kelas'])->first();
+            $materi = GuruMatpel::where('id', $id)->where('kelas_id', $siswa->kelas_id)->with(['matpel', 'materi', 'kelas', 'guru'])->first();
         } else {
             $materi = GuruMatpel::where('id', $id)->with(['matpel', 'materi', 'kelas'])->first();
         }

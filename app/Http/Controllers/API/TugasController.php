@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\GuruMatpel;
 use App\Models\Matpel;
+use App\Models\Siswa;
 use App\Models\Tugas;
 use App\Models\TugasSiswa;
 use Illuminate\Http\Request;
@@ -16,7 +17,10 @@ class TugasController extends Controller
     public function indextugas($guru_matpel_id)
     {
         $user = Auth::user();
+        $siswa = Siswa::find($user->siswa_id);
         if ($user->role == 'siswa') {
+            // $tugas = Tugas::where('guru_matpel_id', $guru_matpel_id)->with(['gurumatpel.guru'])->latest()->get();
+            $tugas = GuruMatpel::where('id', $guru_matpel_id)->where('kelas_id', $siswa->kelas_id)->with(['matpel', 'tugas', 'kelas', 'guru'])->first();
         } else {
             $tugas = Tugas::where('guru_matpel_id', $guru_matpel_id)->latest()->get();
             // $tugas = GuruMatpel::where('id', $guru_matpel_id)->with(['guru', 'tugas'])->get();
@@ -30,19 +34,51 @@ class TugasController extends Controller
         ]);
     }
 
-    public function detailtugas($id)
+    public function detailtugas($tugas_id)
     {
         $user = Auth::user();
         if ($user->role == 'siswa') {
-            // $tugas = TugasSiswa::where('siswa_id', $user->siswa_id)->with('tugas')->get();
+            // $tugas = TugasSiswa::where('siswa_id', $user->siswa_id)->where('tugas_id', $tugas_id)->with('tugas')->get();
+            $tugas = Tugas::find($tugas_id);
+            $tugassiswa = TugasSiswa::where('siswa_id', $user->siswa_id)->where('tugas_id', $tugas_id)->first();
+
+            return response()->json([
+                'success' => true,
+                'msg' => 'List Data Detail Tugas',
+                'tugas' => $tugas,
+                'tugassiswa' => $tugassiswa,
+            ]);
         } else {
-            $tugas = Tugas::where('id', $id)->latest()->with(['tugassiswa.siswa'])->first();
+            $tugas = Tugas::where('id', $tugas_id)->latest()->with(['tugassiswa.siswa'])->first();
+
+            return response()->json([
+                'success' => true,
+                'msg' => 'List Data Detail Tugas',
+                'data' => $tugas,
+            ]);
         }
+    }
+
+    public function inputNilai($tugas_siswa_id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nilai' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        TugasSiswa::where('id', $tugas_siswa_id)->update([
+            'nilai' => $request->nilai,
+        ]);
+
+        $tugasSiswa = TugasSiswa::find($tugas_siswa_id);
 
         return response()->json([
             'success' => true,
-            'msg' => 'List Data Detail Tugas',
-            'data' => $tugas,
+            'msg' => 'Input nilai berhasil',
+            'data' => $tugasSiswa,
         ]);
     }
 

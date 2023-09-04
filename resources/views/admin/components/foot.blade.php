@@ -39,6 +39,16 @@
 <script src="{{ url('admin/js/dashboard.js') }}"></script>
 <script src="{{ url('admin/js/Chart.roundedBarCharts.js') }}"></script>
 <!-- End custom js for this page-->
+<script src="{{ url('//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js') }}"></script>
+
+<script>
+    //message with toastr
+    @if (session()->has('success'))
+        toastr.success('{{ session('success') }}', 'Berhasil');
+    @elseif (session()->has('error'))
+        toastr.error('{{ session('error') }}', 'Gagal');
+    @endif
+</script>
 </body>
 
 </html>

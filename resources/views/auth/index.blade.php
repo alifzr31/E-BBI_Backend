@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url('auth/css/util.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url('auth/css/main.css') }}">
     <!--===============================================================================================-->
+    <link rel="stylesheet" href="{{ url('//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css') }}">
 </head>
 
 <body>
@@ -95,6 +96,17 @@
     </script>
     <!--===============================================================================================-->
     <script src="{{ url('auth/js/main.js') }}"></script>
+    <script src="{{ url('//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js') }}"></script>
+
+    <script>
+        //message with toastr
+        @if (session()->has('success'))
+
+            toastr.success('{{ session('success') }}', 'Berhasil');
+        @elseif (session()->has('error'))
+            toastr.error('{{ session('error') }}', 'Gagal');
+        @endif
+    </script>
 
 </body>
 

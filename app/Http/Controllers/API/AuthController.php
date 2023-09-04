@@ -35,8 +35,15 @@ class AuthController extends Controller
 
         if ($user->role == 'siswa') {
             $usr = Siswa::where('id', $user->siswa_id)->with('user')->first();
-        } else {
+        } else if ($user->role == 'guru') {
             $usr = Guru::where('id', $user->guru_id)->with('user')->first();
+        } else {
+            return response()->json([
+                'success' => true,
+                'user' => 'admin',
+                'msg' => 'Mohon maaf untuk Admin silahkan log in via website',
+                'token' => $token,
+            ]);
         }
 
         return response()->json([
