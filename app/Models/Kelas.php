@@ -28,4 +28,14 @@ class Kelas extends Model
     {
         return $this->hasMany(Siswa::class);
     }
+
+    public function tugas()
+    {
+        return $this->hasMany(Tugas::class);
+    }
+
+    public function materi()
+    {
+        return $this->hasMany(Materi::class);
+    }
 }

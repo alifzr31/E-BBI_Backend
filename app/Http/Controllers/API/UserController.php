@@ -5,7 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\GuruMatpel;
+use App\Models\Materi;
 use App\Models\Siswa;
+use App\Models\Tugas;
+use App\Models\TugasSiswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +44,7 @@ class UserController extends Controller
         } else {
             $guruMatpel = GuruMatpel::where('guru_id', $user->guru_id)->with(['matpel', 'kelas'])->get();
         }
-        
+
 
         return response()->json([
             'success' => true,
@@ -111,6 +114,42 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Ubah password berhasil. Silahkan lakukan log in ulang',
+        ]);
+    }
+
+    public function homeDashboardSiswa()
+    {
+        $user = Auth::user();
+        $siswa = Siswa::find($user->siswa_id);
+        $guru = Guru::find($user->guru_id);
+        if ($user->role == 'siswa') {
+            $tugas = Tugas::with(['tugassiswasatuan', 'gurumatpel.guru', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', $siswa->kelas_id)->latest()->get();
+            $materi = Materi::with(['gurumatpel.guru', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', $siswa->kelas_id)->latest()->get();
+        } else {
+            $tugas = Tugas::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', 1)->latest()->get();
+            $materi = Materi::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', 1)->latest()->get();
+        }
+
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'List Data Materi dan Tugas Anda',
+            'tugas' => $tugas,
+            'materi' => $materi,
+        ]);
+    }
+
+    public function homeDashboardGuru()
+    {
+        $user = Auth::user();
+        $tugas = Tugas::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->latest()->get();
+        $materi = Materi::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'List Data Materi dan Tugas Anda',
+            'tugas' => $tugas,
+            'materi' => $materi,
         ]);
     }
 }

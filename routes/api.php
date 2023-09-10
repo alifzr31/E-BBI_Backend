@@ -42,6 +42,10 @@ Route::middleware('auth:api')->post('/inputnilai/{tugas_siswa_id}', [TugasContro
 Route::middleware('auth:api')->get('/licon', [LiconController::class, 'index']);
 Route::middleware('auth:api')->post('/storelicon/{guru_matpel_id}', [LiconController::class, 'storeLicon']);
 Route::middleware('auth:api')->get('/getonelicon/{guru_matpel_id}', [LiconController::class, 'getOneLicon']);
+Route::middleware('auth:api')->get('/selesailicon/{licon_id}', [LiconController::class, 'selesaiLicon']);
+
+Route::middleware('auth:api')->get('/homedashboard', [UserController::class, 'homeDashboardSiswa']);
+Route::middleware('auth:api')->get('/homedashboardguru', [UserController::class, 'homeDashboardGuru']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout']);

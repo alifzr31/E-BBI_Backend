@@ -32,7 +32,7 @@ class GuruMatpel extends Model
 
     public function materi()
     {
-        return $this->hasMany(Materi::class);
+        return $this->hasMany(Materi::class)->latest();
     }
 
     public function tugas()

@@ -86,6 +86,7 @@ class TugasController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'guru_matpel_id' => 'required',
+            'kelas_id' => 'required',
             'judul' => 'required|unique:materis',
             'subjudul' => 'required',
             'deskripsi' => 'required',
@@ -104,6 +105,7 @@ class TugasController extends Controller
 
         $tugas = Tugas::create([
             'guru_matpel_id' => $request->guru_matpel_id,
+            'kelas_id' => $request->kelas_id,
             'judul' => $request->judul,
             'subjudul' => $request->subjudul,
             'deskripsi' => $request->deskripsi,

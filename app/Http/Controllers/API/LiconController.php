@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Licon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class LiconController extends Controller
@@ -53,6 +54,26 @@ class LiconController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Detail Data Live Conference',
+            'data' => $licon,
+        ]);
+    }
+
+    public function selesaiLicon($licon_id)
+    {
+        $user = Auth::user();
+        if ($user->role == 'guru') {
+            $now = date('Y-m-d H:i:s');
+            Licon::find($licon_id)->update([
+                'end_date' => $now,
+                'status' => 'selesai',
+            ]);
+        }
+
+        $licon = Licon::find($licon_id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Live Conference Telah Selesai',
             'data' => $licon,
         ]);
     }

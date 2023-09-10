@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('materis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('guru_matpel_id')->references('id')->on('guru_matpels')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('kelas_id')->references('id')->on('kelas')->onUpdate('cascade')->onDelete('cascade');
             $table->string('judul')->unique()->nullable();
             $table->string('subjudul')->nullable();
             $table->text('deskripsi')->nullable();
