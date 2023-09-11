@@ -126,8 +126,8 @@ class UserController extends Controller
             $tugas = Tugas::with(['tugassiswasatuan', 'gurumatpel.guru', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', $siswa->kelas_id)->latest()->get();
             $materi = Materi::with(['gurumatpel.guru', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', $siswa->kelas_id)->latest()->get();
         } else {
-            $tugas = Tugas::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', 1)->latest()->get();
-            $materi = Materi::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->whereRelation('gurumatpel', 'kelas_id', 1)->latest()->get();
+            $tugas = Tugas::with(['gurumatpel.kelas', 'gurumatpel.matpel', 'gurumatpel.guru'])->whereRelation('gurumatpel', 'guru_id', $user->guru_id)->latest()->get();
+            $materi = Materi::with(['gurumatpel.kelas', 'gurumatpel.matpel', 'gurumatpel.guru'])->whereRelation('gurumatpel', 'guru_id', $user->guru_id)->latest()->get();
         }
 
 
@@ -142,8 +142,8 @@ class UserController extends Controller
     public function homeDashboardGuru()
     {
         $user = Auth::user();
-        $tugas = Tugas::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->latest()->get();
-        $materi = Materi::with(['gurumatpel.kelas', 'gurumatpel.matpel'])->latest()->get();
+        $tugas = Tugas::with(['gurumatpel.kelas', 'gurumatpel.matpel', 'gurumatpel.guru'])->whereRelation('gurumatpel', 'guru_id', $user->guru_id)->latest()->get();
+        $materi = Materi::with(['gurumatpel.kelas', 'gurumatpel.matpel', 'gurumatpel.guru'])->whereRelation('gurumatpel', 'guru_id', $user->guru_id)->latest()->get();
 
         return response()->json([
             'success' => true,
